@@ -6,7 +6,7 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 18:08:36 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/23 17:20:28 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/23 21:03:10 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,36 @@ void	function_to_send_char_to_convert(char *str)
 	// keep looping untill all chars have been sent
 }*/
 
-void	sighandler(int c)
-{
-	printf("signal: %d\n", c);
-}
-
 void	send_bits(pid_t pid, char c)
 {
 	static int	i;
 	int			bit;
 
-	i = 0;
 	bit = 0;
+	//printf("c >> i = [%d]\n", c >> i);
 	bit = (c >> i) & 1;
+	//printf("i = %d & bit = %d\n", i, bit);
 	if (bit == 0)
-		kill(SIGUSR1, pid);
+		kill(pid, SIGUSR1);
 	else if (bit == 1)
-		kill(SIGUSR2, pid);
-	if (i == 7)
+		kill(pid, SIGUSR2);
+	i++;
+	if (i == 8)
 	{
-		printf("8 bits sent\n");
+	//	printf("___ 8 bits sent ___\n");
 		usleep(4200);
 		i = 0;
+	}
+}
+
+void	send_char(pid_t pid, char c)
+{
+	int i = 0;
+
+	while (i < 8)
+	{
+		send_bits(pid, c);
+		i++;
 	}
 }
 
@@ -60,7 +68,7 @@ void	send_to_server(pid_t pid, char *str)
 	int	i = 0;
 	while (str[i])
 	{
-		send_bits(pid, str[i]);
+		send_char(pid, str[i]);
 		i++;
 	}
 }
@@ -92,6 +100,7 @@ int	main(int ac, char **av)
 		return (0);
 	}
 	pid_t	pid = ft_atoi(av[1]);
+	printf("pid = %d\n", pid);
 	send_to_server(pid, av[2]);
 //	signal(SIGUSR1, sighandler);
 //	signal(SIGUSR2, sighandler);

@@ -8,6 +8,10 @@ FLAGS := -Wall -Wextra -Werror
 
 HEADER := minitalk.h
 
+#LIBFT_NAME := ./libft/libft.a # name of executable
+
+#LIBFT_I := ./libft # path of where to find the makefile to run make
+
 SERVER_CFILES := server.c ft_utils.c
 CLIENT_CFILES := client.c ft_utils.c
 
@@ -25,7 +29,15 @@ $(CLIENT): $(CLIENT_OFILES)
 %.o: %.c
 	$(CC) $(FLAGS) -I$(HEADER) -c $< -o $@
 
+#$(CC) $(FLAGS) -I$(HEADER) -I$(LIBFT_I) -c $< -o $@
+
 all: $(SERVER) $(CLIENT)
+
+#libft:
+#	$(MAKE) -C $(LIBFT)
+
+#libclean:
+#	rm -f $(lib_ofiles) $(LIBFT)
 
 clean:
 	rm -f $(SERVER_OFILES) $(CLIENT_OFILES)
@@ -35,4 +47,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re #libft libclean

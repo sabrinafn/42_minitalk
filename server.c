@@ -6,35 +6,22 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 20:41:17 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/23 17:16:33 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/23 21:08:16 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-/*
-void	handle_sigusr1(int sig)
-{
-	// update the its value is now 0
-	// ??
-}
 
-void	handle_sigusr2(int sig)
-{
-	// update the its value is now 1
-	// ??
-}
-*/
 void	signal_handler(int sig)
 {
 	static int	i;
 	static char c;
 
 	printf("sig = %d\n", sig);
-	i = 0;
-	c = 0;
-	
 	c = c + (sig << i);
-	if (i == 7)
+	i++;
+	printf("i = %d\n", i);
+	if (i == 8)
 	{
 		printf("%c", c);
 		i = 0;
@@ -59,13 +46,16 @@ int	main(void)
 	
 	server_pid = getpid();
 	printf("[server pid = %d]\n", server_pid);
-	action.sa_handler = signal_handler;
 	sigemptyset(&action.sa_mask);
+	action.sa_handler = signal_handler;
+	action.sa_sigaction = NULL;
 	action.sa_flags = 0;
 	sigaction(SIGUSR1, &action, NULL);
 	sigaction(SIGUSR2, &action, NULL);
 
 	while (1)
+	{
 		pause();
+	}
 	return (0);
 }
