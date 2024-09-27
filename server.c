@@ -6,12 +6,12 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 20:41:17 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/23 13:42:21 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:16:33 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
+/*
 void	handle_sigusr1(int sig)
 {
 	// update the its value is now 0
@@ -23,7 +23,7 @@ void	handle_sigusr2(int sig)
 	// update the its value is now 1
 	// ??
 }
-
+*/
 void	signal_handler(int sig)
 {
 	static int	i;

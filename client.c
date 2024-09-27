@@ -6,14 +6,11 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 18:08:36 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/23 13:21:41 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:20:28 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-# define SIGUSR1 0
-# define SIGUSR2 1
 
 // create a function to check if the signal was received by the server
 /*
@@ -46,10 +43,10 @@ void	send_bits(pid_t pid, char c)
 	i = 0;
 	bit = 0;
 	bit = (c >> i) & 1;
-	if (bit == SIGUSR1)
-		kill(SIGURS1, pid);
-	else
-		kill(SIGURS2, pid);
+	if (bit == 0)
+		kill(SIGUSR1, pid);
+	else if (bit == 1)
+		kill(SIGUSR2, pid);
 	if (i == 7)
 	{
 		printf("8 bits sent\n");
@@ -89,13 +86,13 @@ int	main(int ac, char **av)
 		printf("ERROR\nUse: ./program PID STRING\n");
 		return (0);
 	}
-	if (!is_validpid(av[1]));
+	if (!is_validpid(av[1]))
 	{
 		printf("ERROR\nInvalid PID\n");
 		return (0);
 	}
 	pid_t	pid = ft_atoi(av[1]);
-	send_to_server(av[1], av[2]);
+	send_to_server(pid, av[2]);
 //	signal(SIGUSR1, sighandler);
 //	signal(SIGUSR2, sighandler);
 	

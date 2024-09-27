@@ -7,7 +7,7 @@
 # include <signal.h>
 # include <sys/wait.h>
 
-# define SIGUSR1 0
-# define SIGUSR2 1
+int	ft_isdigit(int c);
+int	ft_atoi(const char *str);
 
 #endif
