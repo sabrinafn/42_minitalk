@@ -1,21 +1,22 @@
 #include "minitalk.h"
 
+void	sig_handler(int sig)
+{
+	printf("sig = %d\n", sig);
+}
+
 int	main(void)
 {
-	int	pid;
+	struct sigaction action;
+	action.sa_handler = sig_handler;
+	sigset_t	set;
 
-	pid = fork();
-	if (pid == 0)
-	{
-    printf ("Child : I am the child process\n");
-    printf ("Child : Child’s PID: %d\n", getpid());
-    printf ("Child : Parent’s PID: %d\n", getppid());
-  }
-  else
-  {
-    printf ("Parent : I am the parent process\n");
-    printf ("Parent : Parent’s PID: %d\n", getpid());
-    printf ("Parent : Child’s PID: %d\n", pid);
-  }
+	sigemptyset(&action.sa_mask);
+	action.sa_flags = 0;
+	sigaddset(&set, SIGUSR1);
+	//sigaddset(&set, SIGUSR2);
+	
+	sigaction(SIGUSR1, &action, NULL);
+	
 	return (0);
 }
