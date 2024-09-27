@@ -6,7 +6,7 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 20:41:17 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/23 21:08:16 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:25:16 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,30 @@ void	signal_handler(int sig)
 {
 	static int	i;
 	static char c;
+	int	 bit;
 
-	printf("sig = %d\n", sig);
-	c = c + (sig << i);
-	i++;
-	printf("i = %d\n", i);
-	if (i == 8)
+	printf("c = [%d]\n", c);
+//	printf("sig = [%d] and its binary = [%d]\n", sig, sig >> i);
+	if (sig == SIGUSR1)
+		bit = 0;
+	else
+		bit = 1;
+		
+	c = c + (bit << i);
+	
+//	printf("c = c + (sig << i) = [%c] = [%d]\n", c, c);
+//	printf("*i = %d\n", i);
+	
+	if (i == 7)
 	{
-		printf("%c", c);
+		printf("i = 7\n");
+		printf("CHAR RETURNED: %c\n", c);
 		i = 0;
 		c = 0;
 	}
+	else
+		i++;
 }
-
-// there will be a function which will send back to the client >>
-// like a response, that the signal was received and >>
-// the action was performed
-// maybe after every 8 bits received, transformed into decimal >>
-// then transformed into chars and printed, it will send this signal >>
-// that everything is cool and keep sending more signals to it
-
-// function to convert from each binary digit to a decimal >>
-// which then will be calculated and printed as a char once it its 8 bits
 
 int	main(void)
 {
@@ -47,9 +49,9 @@ int	main(void)
 	server_pid = getpid();
 	printf("[server pid = %d]\n", server_pid);
 	sigemptyset(&action.sa_mask);
-	action.sa_handler = signal_handler;
 	action.sa_sigaction = NULL;
 	action.sa_flags = 0;
+	action.sa_handler = signal_handler;
 	sigaction(SIGUSR1, &action, NULL);
 	sigaction(SIGUSR2, &action, NULL);
 

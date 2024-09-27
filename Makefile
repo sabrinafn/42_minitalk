@@ -14,6 +14,8 @@ CLIENT_CFILES := client.c ft_utils.c
 SERVER_OFILES := $(SERVER_CFILES:.c=.o)
 CLIENT_OFILES := $(CLIENT_CFILES:.c=.o)
 
+all: $(SERVER) $(CLIENT)
+
 # Compiling the server
 $(SERVER): $(SERVER_OFILES)
 	$(CC) $(FLAGS) $(SERVER_OFILES) -o $(SERVER)
@@ -24,8 +26,6 @@ $(CLIENT): $(CLIENT_OFILES)
 
 %.o: %.c
 	$(CC) $(FLAGS) -I$(HEADER) -c $< -o $@
-
-all: $(SERVER) $(CLIENT)
 
 clean:
 	rm -f $(SERVER_OFILES) $(CLIENT_OFILES)
