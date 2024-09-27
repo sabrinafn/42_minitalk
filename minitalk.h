@@ -6,7 +6,7 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:12:39 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/27 19:02:43 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/27 19:09:49 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include <unistd.h>
 # include <signal.h>
 # include <stdbool.h>
-
-//test
 
 int		ft_isdigit(int c);
 int		ft_atoi(const char *str);
