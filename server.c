@@ -6,7 +6,7 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 20:41:17 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/24 20:25:16 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:31:14 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,14 @@ void	signal_handler(int sig)
 	static char c;
 	int	 bit;
 
-	printf("c = [%d]\n", c);
-//	printf("sig = [%d] and its binary = [%d]\n", sig, sig >> i);
 	if (sig == SIGUSR1)
 		bit = 0;
 	else
 		bit = 1;
-		
 	c = c + (bit << i);
-	
-//	printf("c = c + (sig << i) = [%c] = [%d]\n", c, c);
-//	printf("*i = %d\n", i);
-	
 	if (i == 7)
 	{
-		printf("i = 7\n");
-		printf("CHAR RETURNED: %c\n", c);
+		write(1, &c, 1);
 		i = 0;
 		c = 0;
 	}
