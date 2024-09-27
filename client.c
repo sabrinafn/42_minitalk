@@ -6,7 +6,7 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 18:08:36 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/27 16:26:20 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/27 19:41:35 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	send_bits(pid_t pid, char c)
 			kill(pid, SIGUSR2);
 		usleep(500);
 		while (g_signal_status == false)
-			;
+			pause ();
 		g_signal_status = false;
 		i++;
 	}
