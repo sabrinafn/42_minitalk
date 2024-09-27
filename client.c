@@ -6,7 +6,7 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 18:08:36 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/24 20:53:15 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/25 20:34:41 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,7 @@ void	send_bits(pid_t pid, char c)
 		kill(pid, SIGUSR2);
 	usleep(4200);
 	if (i == 7)
-	{
-//		kill(info->si_pid, SIGUSR1);
-//		trying to implement a way to send signal back to server that
-//		8 bits were received
 		i = 0;
-	}
 	else
 		i++;
 }
@@ -73,13 +68,15 @@ int	is_validpid(char *str)
 
 void	signal_handler(int sig)
 {
-	if (sig == 0)
-		printf("sig == 0\n");
-	if (sig < 0)
-		printf("sig < 0\n");
-	if (sig > 0)
-		printf("sig > 0\n");
-	exit(0);
+	if (sig == SIGUSR1)
+	{
+		ft_putstr_fd("SIGUSR1 returned\n", 1);
+	}
+	else
+	{
+		ft_putstr_fd("something else returned\n", 1);
+		exit(0);
+	}
 }
 
 int	main(int ac, char **av)
@@ -94,17 +91,30 @@ int	main(int ac, char **av)
 		printf("ERROR\nInvalid PID\n");
 		return (0);
 	}
-/*	struct sigaction action;
+	pid_t client_pid = getpid();
 
-	sigemptyset(&action.sa_mask);
-	action.sa_sigaction = NULL;
-	action.sa_flags = 0;
+	ft_putstr_fd("CLIENT: client pid: [", 1);
+	ft_putnbr_fd(client_pid, 1);
+	ft_putstr_fd("]\n", 1);
+	
+	struct sigaction action;
+
 	action.sa_handler = signal_handler;
-*/	pid_t	pid = ft_atoi(av[1]);
-	printf("pid = %d\n", pid);
+	sigemptyset(&action.sa_mask);
+	action.sa_flags = 0;
+
+	sigaction(SIGUSR1, &action, NULL);
+	sigaction(SIGUSR2, &action, NULL);
+	
+/************************************/	
+	pid_t	pid = ft_atoi(av[1]);
 	send_to_server(pid, av[2]);
 
-//	sigaction(SIGUSR1, &action, NULL);	
-	
+	// send to server function has to receive siginfo_t
+	// and it will be assigned to action.sa_sigaction
+	while (1)
+	{
+		pause();
+	}
 	return 0;
 }
