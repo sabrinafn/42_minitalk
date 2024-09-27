@@ -6,7 +6,7 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 19:51:26 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/23 10:51:35 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:30:17 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,36 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (nbr * sign);
+}
+
+void	ft_putnbr_fd(int n, int fd)
+{
+	char		num;
+	long int	ln;
+
+	ln = n;
+	if (ln < 0)
+	{
+		ln = -ln;
+		write(fd, "-", 1);
+	}
+	if (ln > 9)
+	{
+		ft_putnbr_fd(ln / 10, fd);
+		ft_putnbr_fd(ln % 10, fd);
+	}
+	if (ln < 10)
+	{
+		num = ln + '0';
+		write(fd, &num, 1);
+	}
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	while (*s)
+	{
+		write(fd, s, 1);
+		s++;
+	}
 }
