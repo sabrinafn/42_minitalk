@@ -6,11 +6,13 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 18:08:36 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/27 12:17:51 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/27 16:26:20 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+bool	g_signal_status = false;
 
 void	send_bits(pid_t pid, char c)
 {
@@ -26,7 +28,10 @@ void	send_bits(pid_t pid, char c)
 			kill(pid, SIGUSR1);
 		else if (bit == 1)
 			kill(pid, SIGUSR2);
-		usleep(4200);
+		usleep(500);
+		while (g_signal_status == false)
+			;
+		g_signal_status = false;
 		i++;
 	}
 }
@@ -41,10 +46,15 @@ void	send_to_server(pid_t pid, char *str)
 		send_bits(pid, str[i]);
 		i++;
 	}
-	send_bits(pid, '\0');
 }
 
-int	is_validpid(char *str)
+void	signal_handler(int sig)
+{
+	if (sig == SIGUSR1)
+		g_signal_status = true;
+}
+
+int	is_pid_valid(char *str)
 {
 	int	i;
 
@@ -55,20 +65,9 @@ int	is_validpid(char *str)
 			return (0);
 		i++;
 	}
+	if (kill(ft_atoi(str), 0))
+		return (0);
 	return (1);
-}
-
-void	signal_handler(int sig)
-{
-	if (sig == SIGUSR1)
-	{
-		ft_putstr_fd("SIGUSR1 returned\n", 1);
-	}
-	else if (sig == SIGUSR2)
-	{
-		ft_putstr_fd("[E X I T]\n", 1);
-		exit(0);
-	}
 }
 
 int	main(int ac, char **av)
@@ -81,7 +80,7 @@ int	main(int ac, char **av)
 		ft_putstr_fd("ERROR\nUse: ./program PID STRING\n", 2);
 		return (0);
 	}
-	if (!is_validpid(av[1]))
+	if (!is_pid_valid(av[1]))
 	{
 		ft_putstr_fd("ERROR\nInvalid PID\n", 2);
 		return (0);
@@ -93,9 +92,5 @@ int	main(int ac, char **av)
 	sigaction(SIGUSR2, &action, NULL);
 	server_pid = ft_atoi(av[1]);
 	send_to_server(server_pid, av[2]);
-	while (1)
-	{
-		pause();
-	}
 	return (0);
 }

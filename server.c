@@ -6,7 +6,7 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 20:41:17 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/27 12:12:20 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/27 15:47:39 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,10 @@ void	signal_handler(int sig, siginfo_t *client, void *param)
 		bit = 0;
 	else
 		bit = 1;
-	c = (c << 1) | bit;
+	c = c + (bit << i);
 	i++;
 	if (i == 8)
 	{
-		if (c == '\0')
-		{
-			kill(client->si_pid, SIGUSR2);
-			return ;
-		}
 		write(1, &c, 1);
 		i = 0;
 		c = 0;
