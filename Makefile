@@ -1,4 +1,6 @@
-NAME := minitalk
+SERVER := server
+
+CLIENT := client
 
 CC := cc
 
@@ -6,23 +8,33 @@ CFLAGS := -Wall -Wextra -Werror
 
 HEADER := minitalk.h
 
-CFILES := server.c
+SERVER_CFILES := server.c
 
-OFILES := $(CFILES:.c=.o)
+CLIENT_CFILES := client.c
 
-%.o: %.c $(HEADER)
+SERVER_OFILES := $(SERVER_CFILES:.c=.o)
+
+CLIENT_OFILES := $(CLIENT_CFILES:.c=.o)
+
+$(SERVER_OFILES): $(SERVER_CFILES) $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OFILES)
+$(CLIENT_OFILES): $(CLIENT_CFILES) $(HEADER)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SERVER): $(SERVER_OFILES)
 	$(CC) $(CFLAGS) $^ -o $@
 
-all: $(NAME)
+$(CLIENT): $(CLIENT_OFILES)
+	$(CC) $(CFLAGS) $^ -o $@
+
+all: $(CLIENT) $(SERVER)
 
 clean:
-	rm -f $(OFILES)
+	rm -f $(SERVER_OFILES) $(CLIENT_OFILES)
 
-fclean:
-	rm -f $(NAME) $(OFILES)
+fclean: clean
+	rm -f $(CLIENT) $(SERVER)
 
 re: fclean all
 

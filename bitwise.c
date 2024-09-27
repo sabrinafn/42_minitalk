@@ -6,12 +6,54 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 19:51:26 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/23 10:28:41 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/23 10:49:52 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <signal.h>
+
+int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
+
+static int	is_white_space(char c)
+{
+	if ((c >= 9 && c <= 13) || c == 32)
+		return (1);
+	return (0);
+}
+
+int	ft_atoi(const char *str)
+{
+	int	i;
+	int	sign;
+	int	nbr;
+
+	i = 0;
+	sign = 1;
+	nbr = 0;
+	while (is_white_space(str[i]) == 1)
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (ft_isdigit(str[i]) == 1)
+	{
+		nbr = nbr * 10 + (str[i] - '0');
+		i++;
+	}
+	return (nbr * sign);
+}
 
 // lógica da ft_putnbr
 void	printme(int bit, int i)
@@ -26,7 +68,47 @@ void	printme(int bit, int i)
 	}
 }
 
+int	ft_ispid(char *str)
+{
+	int	i;
 
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	if (kill(ft_atoi(str), 0) != 0)
+	{
+		printf("process != 0\n");
+		printf("error kill ft_ispid\n");
+	}
+	return (1);
+}
+
+int	main(int ac, char **av)
+{
+	char		*str;
+	pid_t		pid_server;
+	
+	if (ac != 3)
+	{
+		printf("ERROR\n");
+		return (0);
+	}
+	if (!ft_ispid(av[1]))
+	{
+		printf("ERROR\n");
+		return (0);
+	}
+	pid_server = ft_atoi(av[1]);
+	str = av[2];
+
+	
+}
+
+/*
 int	main(void)
 {
 	int	num = 212;
@@ -52,7 +134,7 @@ int	main(void)
 	}
 	printf("\n");
 	i = 0;
-	char *str = "Hello World!\n";
+	char *str = "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et Malorum by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.\n";
 	while (*str)
 	{
 		i = 0;
@@ -66,4 +148,4 @@ int	main(void)
 	}
 
 	return (0);
-}
+}*/

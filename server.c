@@ -6,15 +6,40 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 20:41:17 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/21 20:44:34 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:42:21 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	sig_handler(int sig)
+void	handle_sigusr1(int sig)
 {
+	// update the its value is now 0
+	// ??
+}
+
+void	handle_sigusr2(int sig)
+{
+	// update the its value is now 1
+	// ??
+}
+
+void	signal_handler(int sig)
+{
+	static int	i;
+	static char c;
+
 	printf("sig = %d\n", sig);
+	i = 0;
+	c = 0;
+	
+	c = c + (sig << i);
+	if (i == 7)
+	{
+		printf("%c", c);
+		i = 0;
+		c = 0;
+	}
 }
 
 // there will be a function which will send back to the client >>
@@ -29,16 +54,18 @@ void	sig_handler(int sig)
 
 int	main(void)
 {
-	sigset_t	set;
+	pid_t				server_pid;
 	struct sigaction	action;
 	
-	action.sa_handler = sig_handler;
+	server_pid = getpid();
+	printf("[server pid = %d]\n", server_pid);
+	action.sa_handler = signal_handler;
 	sigemptyset(&action.sa_mask);
 	action.sa_flags = 0;
-	sigaddset(&set, SIGUSR1);
-	//sigaddset(&set, SIGUSR2);
-	
 	sigaction(SIGUSR1, &action, NULL);
-	
+	sigaction(SIGUSR2, &action, NULL);
+
+	while (1)
+		pause();
 	return (0);
 }

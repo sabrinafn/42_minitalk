@@ -7,4 +7,7 @@
 # include <signal.h>
 # include <sys/wait.h>
 
+# define SIGUSR1 0
+# define SIGUSR2 1
+
 #endif
