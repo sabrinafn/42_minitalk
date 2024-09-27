@@ -6,7 +6,7 @@
 /*   By: sabrifer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 12:12:39 by sabrifer          #+#    #+#             */
-/*   Updated: 2024/09/27 12:13:05 by sabrifer         ###   ########.fr       */
+/*   Updated: 2024/09/27 19:02:43 by sabrifer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 # define MINITALK_H
 
 # include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
 # include <signal.h>
-# include <sys/wait.h>
+# include <stdbool.h>
+
+//test
 
 int		ft_isdigit(int c);
 int		ft_atoi(const char *str);
